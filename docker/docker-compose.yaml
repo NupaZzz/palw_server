@@ -1,16 +1,24 @@
-version: '3'
-services:
-  palserver:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${GAME_PORT}:${GAME_PORT}/udp"
-      - "${CON_PORT}:${CON_PORT}/tcp"
-    restart: always
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${GAME_PORT}"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+version: '3' # Specifies the version of the Docker Compose file format
+services: # Defines the services that make up your app
+  palserver: # The name of the first service
+    build: # Configuration options that are applied at build time
+      context: . # The context is the set of files in the specified path or URL
+      dockerfile: Dockerfile # Specifies the Dockerfile to use for building the image
+    ports: # Expose ports
+      - "${GAME_PORT}:${GAME_PORT}/udp" # Maps the UDP game port from the host to the container
+      - "${CON_PORT}:${CON_PORT}/tcp" # Maps the TCP console port from the host to the container
+    restart: always # The service will always restart
+    healthcheck: # Check the health of the service
+      test: ["CMD", "curl", "-f", "http://localhost:${GAME_PORT}"] # The test to determine the health status of the service
+      interval: 1m30s # The time to wait between checks
+      timeout: 10s # The time to wait before considering the check to have hung
+      retries: 3 # The number of consecutive failures needed to consider a service as unhealthy
+      start_period: 40s # The time to wait before starting healthchecks
+    deploy: # Specify configuration related to the deployment and running of services
+      resources: # Set resource constraints
+        limits: # Set hard limits on resources used
+          cpus: '1.0' # Limit the service to use a maximum of 1.0 CPUs
+          memory: 8G # Limit the service to use a maximum of 8 Gigabytes of memory
+    volumes: # Mount paths or named volumes
+      # Mount the host directory /h/Games/PalServer to the container directory /home/steam/Steam/steamapps/common/PalServer/Pal/Saved/SaveGames with read and write permissions
+      - "/h/Games/PalServer:/home/steam/Steam/steamapps/common/PalServer/Pal/Saved/SaveGames:rw"
