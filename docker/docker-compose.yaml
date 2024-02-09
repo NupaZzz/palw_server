@@ -1,0 +1,16 @@
+version: '3'
+services:
+  palserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${GAME_PORT}:${GAME_PORT}/udp"
+      - "${CON_PORT}:${CON_PORT}/tcp"
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${GAME_PORT}"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
