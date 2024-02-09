@@ -9,6 +9,7 @@ PalServer is a game server deployed using Docker or Vagrant. This project uses D
 - Docker
 - Docker Compose
 - Vagrant
+- VirtualBox
 
 ## Installation
 
